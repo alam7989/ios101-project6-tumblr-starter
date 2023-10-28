@@ -19,6 +19,25 @@ class ViewController: UIViewController, UITableViewDataSource {
         fetchPosts()
 
     }
+    
+    // NEW: prepare for segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let selectedRow = tableView.indexPathForSelectedRow?.row else { return }
+        let selectedPost = posts[selectedRow]
+        guard let detailViewController = segue.destination as? DetailViewController else { return }
+        detailViewController.post = selectedPost
+    }
+    
+    // unselect row when you press "back"
+    override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+
+       if let indexPath = tableView.indexPathForSelectedRow {
+           tableView.deselectRow(at: indexPath, animated: true)
+       }
+   }
+    
+    
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
